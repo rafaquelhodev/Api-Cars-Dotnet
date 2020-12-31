@@ -70,5 +70,12 @@ namespace Api_Cars_Dotnet.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("find")]
+        public IActionResult Find(string color)
+        {
+            //
+            return NoContent();
+        }
     }
 }
