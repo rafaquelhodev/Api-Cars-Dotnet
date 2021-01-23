@@ -7,13 +7,13 @@ namespace Api_Cars_Dotnet.Services
     public class CarService
     {
         private readonly IMongoCollection<Car> _cars;
+        private readonly IMongoDatabase _database;
 
-        public CarService(ICarStoreDatabaseSettings settings)
+        public CarService(IMongoDatabase database, ICarStoreDatabaseSettings settings)
         {
-            var client = new MongoClient(settings.ConnectionString);
-            var database = client.GetDatabase(settings.DatabaseName);
+            _database = database;
 
-            _cars = database.GetCollection<Car>(settings.CarsCollectionName);
+            _cars = _database.GetCollection<Car>(settings.CarsCollectionName);
         }
 
         public List<Car> Get() =>

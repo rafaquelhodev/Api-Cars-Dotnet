@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 
 namespace Api_Cars_Dotnet
 {
@@ -34,6 +35,13 @@ namespace Api_Cars_Dotnet
                 sp.GetRequiredService<IOptions<CarStoreDatabaseSettings>>().Value);
 
             services.AddSingleton<CarService>();
+
+            services.AddSingleton<IMongoDatabase>(sp =>
+            {
+                var dbParams = sp.GetRequiredService<IOptions<CarStoreDatabaseSettings>>().Value;
+                var client = new MongoClient(dbParams.ConnectionString);
+                return client.GetDatabase(dbParams.DatabaseName);
+            });
 
             services.AddControllers();
         }
