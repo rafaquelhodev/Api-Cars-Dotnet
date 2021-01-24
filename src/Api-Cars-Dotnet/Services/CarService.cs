@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using Api_Cars_Dotnet.Models;
 using MongoDB.Driver;
 
@@ -24,8 +27,12 @@ namespace Api_Cars_Dotnet.Services
 
         public Car Create(Car car)
         {
+            if (!car.IsValid())
+                throw new ApplicationException("Invalid input");
+
             _cars.InsertOne(car);
             return car;
+
         }
 
         public void Update(string id, Car carIn) =>

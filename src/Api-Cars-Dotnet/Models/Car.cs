@@ -13,5 +13,15 @@ namespace Api_Cars_Dotnet.Models
         public string Brand { get; set; }
         public decimal Price { get; set; }
         public int Age { get; set; }
+
+        public bool IsValid()
+        {
+            bool valid = true;
+
+            if (Price < 0 || Age < 0)
+                valid = false;
+
+            return valid;
+        }
     }
 }
