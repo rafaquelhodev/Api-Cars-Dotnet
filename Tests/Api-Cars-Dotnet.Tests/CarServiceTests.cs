@@ -36,6 +36,32 @@ namespace Api_Cars_Dotnet.Tests
 
             collectionMock.Verify(x => x.InsertOne(It.IsAny<Car>(), null, default), Times.Once());
         }
+
+        [Fact(DisplayName = "Create invalid car")]
+        public void InsertCarWithInvalidAgeOnCreation()
+        {
+            var collectionMock = new Mock<IMongoCollection<Car>>();
+            var dbMock = new Mock<IMongoDatabase>();
+
+            dbMock.Setup(x => x.GetCollection<Car>(It.IsAny<string>(), null)).Returns(collectionMock.Object);
+            collectionMock.Setup(x => x.InsertOne(It.IsAny<Car>(), null, default)).Verifiable();
+
+            _dbSettingMock.Setup(m => m.ConnectionString).Returns(_fixture.Create<string>);
+            _dbSettingMock.Setup(m => m.DatabaseName).Returns(_fixture.Create<string>);
+
+            // Act
+            var carService = new CarService(dbMock.Object, _dbSettingMock.Object);
+            Assert.NotNull(carService);
+
+            var invalidCar = new Car
+            {
+                Age = -10
+            };
+
+            Assert.Throws<ApplicationException>(() => carService.Create(invalidCar));
+
+            collectionMock.Verify(x => x.InsertOne(It.IsAny<Car>(), null, default), Times.Never());
+        }
     }
 
 }
