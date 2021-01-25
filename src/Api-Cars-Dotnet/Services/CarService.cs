@@ -9,39 +9,32 @@ namespace Api_Cars_Dotnet.Services
 {
     public class CarService
     {
-        private readonly IMongoCollection<Car> _cars;
-        private readonly IMongoDatabase _database;
+        private readonly IRepository<Car> _repository;
 
-        public CarService(IMongoDatabase database, ICarStoreDatabaseSettings settings)
-        {
-            _database = database;
-
-            _cars = _database.GetCollection<Car>(settings.CarsCollectionName);
-        }
+        public CarService(IRepository<Car> repository) => _repository = repository;
 
         public List<Car> Get() =>
-            _cars.Find(car => true).ToList();
+           _repository.GetAll();
 
         public Car Get(string id) =>
-            _cars.Find<Car>(car => car.Id == id).FirstOrDefault();
+            _repository.GetById(id);
 
         public Car Create(Car car)
         {
             if (!car.IsValid())
                 throw new ApplicationException("Invalid input");
 
-            _cars.InsertOne(car);
-            return car;
-
+            var InsertedCar = _repository.Insert(car);
+            return InsertedCar;
         }
 
         public void Update(string id, Car carIn) =>
-            _cars.ReplaceOne(car => car.Id == id, carIn);
+            _repository.Update(id, carIn);
 
         public void Remove(Car carIn) =>
-            _cars.DeleteOne(car => car.Id == carIn.Id);
+            _repository.Delete(carIn);
 
         public void Remove(string id) =>
-            _cars.DeleteOne(car => car.Id == id);
+            _repository.Delete(id);
     }
 }
