@@ -31,7 +31,7 @@ namespace Api_Cars_Dotnet
         {
             services.Configure<CarStoreDatabaseSettings>(Configuration.GetSection(nameof(CarStoreDatabaseSettings)));
 
-            services.AddSingleton<ICarStoreDatabaseSettings>(sp =>
+            services.AddSingleton<IDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<CarStoreDatabaseSettings>>().Value);
 
             services.AddSingleton<CarService>();
@@ -42,6 +42,8 @@ namespace Api_Cars_Dotnet
                 var client = new MongoClient(dbParams.ConnectionString);
                 return client.GetDatabase(dbParams.DatabaseName);
             });
+
+            services.AddSingleton<IRepository<Car>, MongoDBRepository<Car>>();
 
             services.AddControllers();
         }
