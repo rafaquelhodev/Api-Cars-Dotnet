@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Api_Cars_Dotnet.Models;
 using Api_Cars_Dotnet.Services;
 using AutoFixture;
@@ -23,8 +24,6 @@ namespace Api_Cars_Dotnet.Tests
                 Age = 10
             };
 
-            // var repositoryMock = new Mock<IRepository<Car>>();
-
             repositoryMock.Reset();
 
             repositoryMock.Setup(x => x.Insert(It.IsAny<Car>())).Returns(car);
@@ -41,23 +40,12 @@ namespace Api_Cars_Dotnet.Tests
         [Fact(DisplayName = "Create invalid car")]
         public void InsertCarWithInvalidAgeOnCreation()
         {
-            // var collectionMock = new Mock<IMongoCollection<Car>>();
-            // var dbMock = new Mock<IMongoDatabase>();
-
-            // dbMock.Setup(x => x.GetCollection<Car>(It.IsAny<string>(), null)).Returns(collectionMock.Object);
-            // collectionMock.Setup(x => x.InsertOne(It.IsAny<Car>(), null, default)).Verifiable();
-
-            // _dbSettingMock.Setup(m => m.ConnectionString).Returns(_fixture.Create<string>);
-            // _dbSettingMock.Setup(m => m.DatabaseName).Returns(_fixture.Create<string>);
-
             var car = new Car
             {
                 Age = -10
             };
 
             repositoryMock.Reset();
-
-            // var repositoryMock = new Mock<IRepository<Car>>();
 
             // Act
             var carService = new CarService(repositoryMock.Object);
@@ -99,6 +87,8 @@ namespace Api_Cars_Dotnet.Tests
 
             repositoryMock.Verify(x => x.GetById(It.IsAny<string>()), Times.Once());
         }
+
+
     }
 
 }
