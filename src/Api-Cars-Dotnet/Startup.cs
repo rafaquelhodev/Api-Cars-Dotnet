@@ -34,7 +34,7 @@ namespace Api_Cars_Dotnet
             services.AddSingleton<IDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<CarStoreDatabaseSettings>>().Value);
 
-            services.AddSingleton<CarService>();
+            services.AddSingleton<ICarService, CarService>();
 
             services.AddSingleton<IMongoDatabase>(sp =>
             {

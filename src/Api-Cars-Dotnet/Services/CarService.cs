@@ -7,7 +7,7 @@ using MongoDB.Driver;
 
 namespace Api_Cars_Dotnet.Services
 {
-    public class CarService
+    public class CarService : ICarService
     {
         private readonly IRepository<Car> _repository;
 

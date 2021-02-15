@@ -9,9 +9,9 @@ namespace Api_Cars_Dotnet.Controllers
     [ApiController]
     public class CarsController : ControllerBase
     {
-        private CarService _carService;
+        private ICarService _carService;
 
-        public CarsController(CarService carService)
+        public CarsController(ICarService carService)
         {
             _carService = carService;
         }
